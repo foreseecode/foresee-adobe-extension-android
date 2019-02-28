@@ -36,8 +36,8 @@ import static com.foresee.sdk.adobeExtension.Constants.SharedState.IDENTITY;
 
 public class ExtensionImpl extends Extension {
     // region - constants
-    private static final String FORESEE_CLIENT_ID_KEY = "foreseeClientId";
-    private static final String FORESEE_IS_DEBUG_KEY = "foreseeIsDebug";
+    private static final String FORESEE_CLIENT_ID_KEY = "foresee.clientId";
+    private static final String FORESEE_IS_DEBUG_KEY = "foresee.isDebugLoggingEnabled";
     private static final String IDENTITY_MID_KEY = "mid";
     //endregion
 
