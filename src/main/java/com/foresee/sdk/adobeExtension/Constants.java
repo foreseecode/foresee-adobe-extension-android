@@ -14,6 +14,8 @@ class Constants {
     static final String EVENT_SOURCE_FORESEE_RESPONSE_CONTENT = "com.foresee.sdk.eventSource.responseContent";
     static final String EVENT_SOURCE_ADOBE_RESPONSE_CONTENT = "com.adobe.eventSource.responseContent";
     static final String EVENT_SOURCE_ADOBE_SHARED_STATE = "com.adobe.eventSource.sharedState";
+    static final String RULES_TRIGGERED_CONSEQUENCE_KEY = "triggeredconsequence";
+    static final String RULES_DETAIL_KEY = "detail";
 
     class SharedState {
         static final String STATE_OWNER = "stateowner";

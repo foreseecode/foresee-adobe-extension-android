@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 
 import com.adobe.marketing.mobile.Event;
 import com.adobe.marketing.mobile.Extension;
@@ -17,6 +18,7 @@ import com.foresee.sdk.common.Logging;
 import com.foresee.sdk.common.utils.Util;
 
 import java.lang.reflect.Field;
+import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -28,6 +30,8 @@ import static com.foresee.sdk.adobeExtension.Constants.EVENT_TYPE_ADOBE_HUB;
 import static com.foresee.sdk.adobeExtension.Constants.EVENT_TYPE_ADOBE_RULES_ENGINE;
 import static com.foresee.sdk.adobeExtension.Constants.EVENT_TYPE_FORESEE_EXTENSION;
 import static com.foresee.sdk.adobeExtension.Constants.FORESEE_EXTENSION_NAME;
+import static com.foresee.sdk.adobeExtension.Constants.RULES_DETAIL_KEY;
+import static com.foresee.sdk.adobeExtension.Constants.RULES_TRIGGERED_CONSEQUENCE_KEY;
 import static com.foresee.sdk.adobeExtension.Constants.SharedState.IDENTITY;
 
 /**
@@ -39,6 +43,8 @@ public class ExtensionImpl extends Extension {
     private static final String FORESEE_CLIENT_ID_KEY = "foresee.clientId";
     private static final String FORESEE_IS_DEBUG_KEY = "foresee.isDebugLoggingEnabled";
     private static final String IDENTITY_MID_KEY = "mid";
+    private static final String ACTION_TO_PERFORM_KEY = "foresee.performAction";
+    private static final String ACTION_CHECK_ELIGIBILITY = "checkIfEligibleForSurvey";
     //endregion
 
     // region - variables
@@ -63,6 +69,7 @@ public class ExtensionImpl extends Extension {
             }
         };
 
+        boolean result;
         // register a listener for shared state changes
         extensionApi.registerEventListener(
                 EVENT_TYPE_ADOBE_HUB,
@@ -111,7 +118,7 @@ public class ExtensionImpl extends Extension {
      *
      * @return the application context
      */
-    private Context getAdobeContext() {
+    public static Context getAdobeContext() {
         // Use reflection to get the application context
         Context context = null;
         try {
@@ -233,7 +240,28 @@ public class ExtensionImpl extends Extension {
 
     private void handleRulesConsequence(Event event, Map<String, Object> configSharedState) {
         Logging.foreSeeLog(Logging.LogLevel.INFO, LogTags.ADOBE_TAG, "Handling a rules consequence");
-        // no-ops
+        Map<String, Object> eventData = event.getEventData();
+
+        Map<String, Object> triggeredConsequence = (HashMap<String, Object>) eventData.get(RULES_TRIGGERED_CONSEQUENCE_KEY);
+        if (triggeredConsequence == null || triggeredConsequence.isEmpty()) {
+            return;
+        }
+
+        Map<String, Object> detail = (Map<String, Object>)triggeredConsequence.get(RULES_DETAIL_KEY);
+        if (detail == null || detail.isEmpty()) {
+            return;
+        }
+
+        String actionToPerform = (String) detail.get(ACTION_TO_PERFORM_KEY);
+        if (Util.isBlank(actionToPerform)) {
+            Logging.alwaysLog(Logging.LogLevel.INFO, LogTags.ADOBE_TAG,
+                    "Not a request consequence");
+            return;
+        }
+
+        if (Util.compareStringsIngoreCases(actionToPerform, ACTION_CHECK_ELIGIBILITY)) {
+            ForeSee.checkIfEligibleForSurvey();
+        }
     }
 
     private void handleForeSeeSpecificEvent(Event event, Map<String, Object> configSharedState) {
