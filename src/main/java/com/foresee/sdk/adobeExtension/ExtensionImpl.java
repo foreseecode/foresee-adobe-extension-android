@@ -119,7 +119,7 @@ public class ExtensionImpl extends Extension {
      *
      * @return the application context
      */
-    public static Context getAdobeContext() {
+    private Context getAdobeContext() {
         // Use reflection to get the application context
         Context context = null;
         try {
