@@ -106,7 +106,7 @@ public class ExtensionImpl extends Extension {
 
     @Override
     protected String getVersion() {
-        return BuildConfig.ForeSeeSDKVersion;
+        return BuildConfig.ForeSeeAdobeExtensionVersion;
     }
     // endregion
 

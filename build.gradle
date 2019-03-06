@@ -24,6 +24,7 @@ android {
     buildTypes {
         all {
             buildConfigField "String", "ForeSeeSDKVersion", "\"${SDKVersionName}\""
+            buildConfigField "String", "ForeSeeAdobeExtensionVersion", "\"${AdobeExtensionVersionName}\""
 
             println("");
             println("**************************************")
