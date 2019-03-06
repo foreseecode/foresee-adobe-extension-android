@@ -1,7 +1,5 @@
 package com.foresee.sdk;
 
-import android.app.Application;
-
 import com.adobe.marketing.mobile.ExtensionError;
 import com.adobe.marketing.mobile.ExtensionErrorCallback;
 import com.adobe.marketing.mobile.MobileCore;
@@ -31,8 +29,6 @@ public class ForeSeeAdobeExtension {
                         "Failed to register the ForeSee extension: "+ extensionError.getErrorName());
             }
         };
-
-        ForeSee.registerActivityLifecycleCallbacks((Application) ExtensionImpl.getAdobeContext());
 
         if (!MobileCore.registerExtension(ExtensionImpl.class, errorCallback)) {
             Logging.alwaysLog(Logging.LogLevel.ERROR, LogTags.ADOBE_TAG,

@@ -4,7 +4,6 @@ import android.app.Application;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
 
 import com.adobe.marketing.mobile.Event;
 import com.adobe.marketing.mobile.Extension;
@@ -42,6 +41,7 @@ public class ExtensionImpl extends Extension {
     // region - constants
     private static final String FORESEE_CLIENT_ID_KEY = "foresee.clientId";
     private static final String FORESEE_IS_DEBUG_KEY = "foresee.isDebugLoggingEnabled";
+    private static final String FORESEE_SHOULD_SKIP_POOLING_KEY = "foresee.shouldSkipPoolingCheck";
     private static final String IDENTITY_MID_KEY = "mid";
     private static final String ACTION_TO_PERFORM_KEY = "foresee.performAction";
     private static final String ACTION_CHECK_ELIGIBILITY = "checkIfEligibleForSurvey";
@@ -111,6 +111,7 @@ public class ExtensionImpl extends Extension {
     // endregion
 
     // region - implementations
+
     /**
      * Get the application context from the adobe core module via reflection.
      * Until Adobe provides a formal way to retrieve the context, this is the only way
@@ -125,7 +126,7 @@ public class ExtensionImpl extends Extension {
             Class cls = Class.forName("com.adobe.marketing.mobile.App");
             Field appContext = cls.getDeclaredField("appContext");
             appContext.setAccessible(true);
-            context = (Context)appContext.get(null);
+            context = (Context) appContext.get(null);
         } catch (Exception e) {
             Logging.foreSeeLog(Logging.LogLevel.ERROR, LogTags.ADOBE_TAG,
                     "Failed to retrieve application context: " + e.getMessage());
@@ -171,7 +172,7 @@ public class ExtensionImpl extends Extension {
                 @Override
                 public void error(final ExtensionError extensionError) {
                     Logging.alwaysLog(Logging.LogLevel.ERROR, LogTags.ADOBE_TAG,
-                            String.format(Locale.CANADA,"Could not process event, an error occurred while retrieving configuration shared state: %s", extensionError.getErrorName()));
+                            String.format(Locale.CANADA, "Could not process event, an error occurred while retrieving configuration shared state: %s", extensionError.getErrorName()));
                 }
             };
 
@@ -216,6 +217,8 @@ public class ExtensionImpl extends Extension {
         String clientId = (String) configSharedState.get(FORESEE_CLIENT_ID_KEY);
         if (!Util.isBlank(clientId)) {
             final Boolean isDebug = (Boolean) configSharedState.get(FORESEE_IS_DEBUG_KEY);
+            final Boolean shouldSkipPooling = (Boolean) configSharedState.get(FORESEE_SHOULD_SKIP_POOLING_KEY);
+
             // Try start ForeSee SDK
             if (!didReceivedConfiguration && applicationContext != null) {
                 didReceivedConfiguration = true;
@@ -229,6 +232,7 @@ public class ExtensionImpl extends Extension {
                     public void run() {
                         ForeSee.setDebugLogEnabled((isDebug == null) ? false : isDebug);
                         ForeSee.start(applicationContext, ForeSeeAdobeExtension.getForeSeeSDKConfigurationListener());
+                        ForeSee.setSkipPoolingCheck((shouldSkipPooling == null) ? false : shouldSkipPooling);
                     }
                 });
             }
@@ -247,7 +251,7 @@ public class ExtensionImpl extends Extension {
             return;
         }
 
-        Map<String, Object> detail = (Map<String, Object>)triggeredConsequence.get(RULES_DETAIL_KEY);
+        Map<String, Object> detail = (Map<String, Object>) triggeredConsequence.get(RULES_DETAIL_KEY);
         if (detail == null || detail.isEmpty()) {
             return;
         }
