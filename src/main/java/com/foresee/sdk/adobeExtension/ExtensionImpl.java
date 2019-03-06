@@ -223,9 +223,6 @@ public class ExtensionImpl extends Extension {
             if (!didReceivedConfiguration && applicationContext != null) {
                 didReceivedConfiguration = true;
 
-                // Identity is not a mandatory dependency for this event, just retrieve mid
-                extractMidFromIdentitySharedState(event);
-
                 Handler handler = new Handler(Looper.getMainLooper());
                 handler.post(new Runnable() {
                     @Override
