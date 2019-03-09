@@ -6,7 +6,7 @@ package com.foresee.sdk.adobeExtension;
 
 class Constants {
     static final String FORESEE_EXTENSION_NAME = "com.foresee.sdk.adobeextension";
-    static final String ADOBE_IDENTITY_MID_CPP_KEY = "adobeIdMid";
+    static final String ADOBE_IDENTITY_MID_CPP_KEY = "OMTR_MCID";
     static final String EVENT_TYPE_FORESEE_EXTENSION = "com.foresee.sdk.eventType.adobeExtension";
     static final String EVENT_TYPE_ADOBE_RULES_ENGINE = "com.adobe.eventType.rulesEngine";
     static final String EVENT_TYPE_ADOBE_HUB = "com.adobe.eventType.hub";

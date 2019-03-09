@@ -39,9 +39,9 @@ import static com.foresee.sdk.adobeExtension.Constants.SharedState.IDENTITY;
 
 public class ExtensionImpl extends Extension {
     // region - constants
-    private static final String FORESEE_CLIENT_ID_KEY = "foresee.clientId";
     private static final String FORESEE_IS_DEBUG_KEY = "foresee.isDebugLoggingEnabled";
     private static final String FORESEE_SHOULD_SKIP_POOLING_KEY = "foresee.shouldSkipPoolingCheck";
+    private static final String FORESEE_SHOULD_CONNECT_TO_CXSUITE_KEY = "foresee.shouldConnectToCxSuite";
     private static final String IDENTITY_MID_KEY = "mid";
     private static final String ACTION_TO_PERFORM_KEY = "foresee.performAction";
     private static final String ACTION_CHECK_ELIGIBILITY = "checkIfEligibleForSurvey";
@@ -55,6 +55,7 @@ public class ExtensionImpl extends Extension {
     private boolean didReceivedConfiguration = false;
     private boolean didSetAdobeMid = false;
     private String mid;
+    private boolean shouldConnectToCxSuite;
     // endregion
 
     // region - constructor
@@ -186,7 +187,7 @@ public class ExtensionImpl extends Extension {
                 return;
             }
 
-            if (!didSetAdobeMid) {
+            if (!didSetAdobeMid && shouldConnectToCxSuite) {
                 // Identity is not a mandatory dependency for this event, just retrieve mid
                 extractMidFromIdentitySharedState(eventToProcess);
                 // Set a Adobe ID CPP
@@ -214,10 +215,13 @@ public class ExtensionImpl extends Extension {
     private void handleAdobeHubEvent(Event event, Map<String, Object> configSharedState) {
         Logging.foreSeeLog(Logging.LogLevel.INFO, LogTags.ADOBE_TAG, "Handling a Adobe hub event");
 
-        String clientId = (String) configSharedState.get(FORESEE_CLIENT_ID_KEY);
-        if (!Util.isBlank(clientId)) {
-            final Boolean isDebug = (Boolean) configSharedState.get(FORESEE_IS_DEBUG_KEY);
-            final Boolean shouldSkipPooling = (Boolean) configSharedState.get(FORESEE_SHOULD_SKIP_POOLING_KEY);
+        final Boolean isDebug = (Boolean) configSharedState.get(FORESEE_IS_DEBUG_KEY);
+        final Boolean shouldSkipPooling = (Boolean) configSharedState.get(FORESEE_SHOULD_SKIP_POOLING_KEY);
+        final Boolean shouldConnectToCxSuite = (Boolean) configSharedState.get(FORESEE_SHOULD_CONNECT_TO_CXSUITE_KEY);
+
+        if (shouldConnectToCxSuite != null) {
+
+            this.shouldConnectToCxSuite = shouldConnectToCxSuite;
 
             // Try start ForeSee SDK
             if (!didReceivedConfiguration && applicationContext != null) {
@@ -235,7 +239,7 @@ public class ExtensionImpl extends Extension {
             }
         } else {
             Logging.alwaysLog(Logging.LogLevel.ERROR, LogTags.ADOBE_TAG,
-                    "Cannot initialize ForeSee SDK without a valid client id");
+                    "Cannot initialize ForeSee SDK because some configuration settings are missing");
         }
     }
 
