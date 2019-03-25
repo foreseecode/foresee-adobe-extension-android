@@ -1,120 +1,19 @@
-apply plugin: 'com.android.library'
-apply from: '../common-utils.gradle'
-
-allprojects {
-    tasks.withType(Test) {
-        testLogging {
-            exceptionFormat "full"
-            showCauses true
-            showExceptions true
-            showStackTraces true
-            showStandardStreams true
-            events = ["passed", "skipped", "failed"]
-        }
-    }
-}
+apply from: '../gradles/sdk-common.gradle'
+apply from: '../gradles/publishing.gradle'
 
 android {
-    compileSdkVersion 26
-    defaultConfig {
-        minSdkVersion 19
-        targetSdkVersion 24
-    }
-
     buildTypes {
         all {
             buildConfigField "String", "ForeSeeSDKVersion", "\"${SDKVersionName}\""
             buildConfigField "String", "ForeSeeAdobeExtensionVersion", "\"${AdobeExtensionVersionName}\""
-
-            println("");
-            println("**************************************")
-            println("      BUILDING SDK: ${SDKBuildName}")
-            println("**************************************")
-            println("");
-        }
-        debug {
-            debuggable true
-            sourceSets {
-                main {
-                    res {
-                        srcDirs =
-                                [
-                                        'src/main/res/',
-                                ]
-                    }
-                }
-            }
-        }
-
-        release {
-            debuggable false
-            minifyEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), '../proguard-rules.pro', 'module-proguard-rules.pro'
-        }
-    }
-    dexOptions {
-        javaMaxHeapSize "2g"
-    }
-    packagingOptions {
-        exclude 'META-INF/LICENSE'
-        exclude 'META-INF/LICENSE.txt'
-        exclude 'META-INF/NOTICE'
-        exclude 'META-INF/NOTICE.txt'
-        exclude 'NOTICE'
-        exclude 'META-INF/DEPENDENCIES'
-        exclude 'DEPENDENCIES'
-        exclude 'META-INF/DEPENDENCIES.txt'
-    }
-    testOptions {
-        useLibrary 'org.apache.http.legacy'
-        unitTests.returnDefaultValues = true
-    }
-
-
-    flavorDimensions "foresee"
-
-    if (!project.hasProperty("PUBLISHSDK"))
-    {
-        defaultPublishConfig "dev"
-
-        productFlavors {
-            dev {}
-            qa {}
-            prod {}
-        }
-
-        sourceSets {
-            dev {
-                java.srcDirs = ['src/main/java', 'src/dev/java', 'src/debugCommand/enabled/java']
-            }
-            qa {
-                java.srcDirs = ['src/main/java', 'src/qa/java', 'src/debugCommand/enabled/java']
-            }
-            prod {
-                java.srcDirs = ['src/main/java', 'src/prod/java', 'src/debugCommand/disabled/java']
-            }
-        }
-    }
-    else
-    {
-        sourceSets {
-            main {
-                java.srcDirs = ['src/main/java', 'src/prod/java']
-            }
         }
     }
 }
-
 
 dependencies {
     implementation project(path: ':sdk:core')
     implementation project(path: ':sdk:cxMeasure')
     compileOnly 'com.adobe.marketing.mobile:userprofile:1.+'
     compileOnly 'com.adobe.marketing.mobile:sdk-core:1.+'
-
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'com.android.support.test:runner:1.0.2'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
 }
 
-apply from: '../publishing.gradle'
