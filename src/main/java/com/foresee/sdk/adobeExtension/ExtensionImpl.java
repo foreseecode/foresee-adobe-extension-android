@@ -232,7 +232,7 @@ public class ExtensionImpl extends Extension {
                     @Override
                     public void run() {
                         ForeSee.setDebugLogEnabled((isDebug == null) ? false : isDebug);
-                        ForeSee.start(applicationContext, ForeSeeAdobeExtension.getForeSeeSDKConfigurationListener());
+                        ForeSee.enable();
                         ForeSee.setSkipPoolingCheck((shouldSkipPooling == null) ? false : shouldSkipPooling);
                     }
                 });

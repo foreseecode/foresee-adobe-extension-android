@@ -1,11 +1,16 @@
 package com.foresee.sdk;
 
+import android.app.Application;
+import android.content.Context;
+
 import com.adobe.marketing.mobile.ExtensionError;
 import com.adobe.marketing.mobile.ExtensionErrorCallback;
 import com.adobe.marketing.mobile.MobileCore;
 import com.foresee.sdk.adobeExtension.ExtensionImpl;
 import com.foresee.sdk.adobeExtension.logging.LogTags;
 import com.foresee.sdk.common.Logging;
+
+import java.lang.reflect.Field;
 
 /**
  * Created by alan.wang on 2/27/19.
@@ -34,6 +39,8 @@ public class ForeSeeAdobeExtension {
             Logging.alwaysLog(Logging.LogLevel.ERROR, LogTags.ADOBE_TAG,
                     "Failed to register the ForeSee extension");
         }
+
+        ForeSee.startWithLateEnableFlag(getAdobeContext(), ForeSeeAdobeExtension.getForeSeeSDKConfigurationListener());
     }
 
     /**
@@ -58,4 +65,18 @@ public class ForeSeeAdobeExtension {
        return foreSeeSDKConfigurationListener;
     }
 
+    private static Application getAdobeContext() {
+        // Use reflection to get the application context
+        Application context = null;
+        try {
+            Class cls = Class.forName("com.adobe.marketing.mobile.App");
+            Field appContext = cls.getDeclaredField("appContext");
+            appContext.setAccessible(true);
+            context = (Application) appContext.get(null);
+        } catch (Exception e) {
+            Logging.foreSeeLog(Logging.LogLevel.ERROR, LogTags.ADOBE_TAG,
+                    "Failed to retrieve application context: " + e.getMessage());
+        }
+        return context;
+    }
 }
