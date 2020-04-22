@@ -12,6 +12,7 @@ import com.adobe.marketing.mobile.ExtensionError;
 import com.adobe.marketing.mobile.ExtensionErrorCallback;
 import com.foresee.sdk.ForeSee;
 import com.foresee.sdk.ForeSeeAdobeExtension;
+import com.foresee.sdk.ForeSeeCxMeasure;
 import com.foresee.sdk.adobeExtension.logging.LogTags;
 import com.foresee.sdk.common.Logging;
 import com.foresee.sdk.common.utils.Util;
@@ -265,7 +266,7 @@ public class ExtensionImpl extends Extension {
         }
 
         if (Util.compareStringsIngoreCases(actionToPerform, ACTION_CHECK_ELIGIBILITY)) {
-            ForeSee.checkIfEligibleForSurvey();
+            ForeSeeCxMeasure.checkIfEligibleForSurvey();
         }
     }
 
