@@ -1,19 +1,29 @@
-apply from: '../gradles/sdk-common.gradle'
-apply from: '../gradles/publishing.gradle'
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+buildscript { 
+    ext.kotlin_version = '1.3.41'
 
-android {
-    buildTypes {
-        all {
-            buildConfigField "String", "ForeSeeSDKVersion", "\"${SDKVersionName}\""
-            buildConfigField "String", "ForeSeeAdobeExtensionVersion", "\"${AdobeExtensionVersionName}\""
+    repositories {
+        jcenter()
+        google()
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:3.2.1'
+    classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version" }
+}
+
+
+allprojects {
+    repositories {
+        jcenter()
+        google()
+        mavenLocal()
+        flatDir {
+            dirs '../libs'
         }
     }
 }
 
-dependencies {
-    implementation project(path: ':sdk:core')
-    implementation project(path: ':sdk:cxMeasure')
-    compileOnly 'com.adobe.marketing.mobile:userprofile:1.+'
-    compileOnly 'com.adobe.marketing.mobile:sdk-core:1.+'
+task clean(type: Delete) {
+    delete rootProject.buildDir
 }
-

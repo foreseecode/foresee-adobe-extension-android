@@ -1,0 +1,36 @@
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion 26
+    defaultConfig {
+        minSdkVersion 19
+        targetSdkVersion 26
+    }
+
+    buildTypes {
+        all {
+            buildConfigField "String", "ForeSeeAdobeExtensionVersion", "\"1.2.0\""
+        }
+        debug {
+            debuggable true
+        }
+
+        release {
+            debuggable false
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+
+    // ForeSee dependencies
+    implementation 'com.foresee.sdk:core:6.+'
+    implementation 'com.foresee.sdk:cxMeasure:6.+'
+
+    // Adobe dependencies
+    compileOnly 'com.adobe.marketing.mobile:userprofile:1.+'
+    compileOnly 'com.adobe.marketing.mobile:sdk-core:1.+'
+
+    compileOnly 'com.android.support:appcompat-v7:26.1.0'
+}

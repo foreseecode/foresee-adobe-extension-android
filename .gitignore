@@ -1,1 +1,58 @@
-/build
+.DS_Store
+
+# New Android Studio requirements
+/bin
+
+
+*.class
+
+# Package Files #
+*.jar
+*.war
+*.ear
+
+
+
+target/
+
+
+*.iml
+*.ipr
+*.iws
+.idea/
+
+project.properties
+local.properties
+
+class_files.txt
+
+out
+
+gen-external-apklibs
+build/
+
+.gradle
+
+# Ignore Gradle GUI config
+gradle-app.setting
+
+# Avoid ignoring Gradle wrapper jar file (.jar files are usually ignored)
+!gradle-wrapper.jar
+
+# Cache of project
+.gradletasknamecache
+
+# NDK (as of MOBILSDK-1361)
+.externalNativeBuild/
+
+# generated mapping folder & files
+proguard/
+
+# fastlane junks
+.classpath
+.project
+.settings/
+Gemfile
+Gemfile.lock
+fastlane/report.xml
+

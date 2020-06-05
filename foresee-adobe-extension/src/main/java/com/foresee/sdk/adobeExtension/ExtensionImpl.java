@@ -13,7 +13,7 @@ import com.adobe.marketing.mobile.ExtensionErrorCallback;
 import com.foresee.sdk.ForeSee;
 import com.foresee.sdk.ForeSeeCxMeasure;
 import com.foresee.sdk.adobeExtension.logging.LogTags;
-import com.foresee.sdk.common.Logging;
+import com.foresee.sdk.adobeExtension.logging.Logging;
 import com.foresee.sdk.common.utils.Util;
 
 import java.lang.reflect.Field;

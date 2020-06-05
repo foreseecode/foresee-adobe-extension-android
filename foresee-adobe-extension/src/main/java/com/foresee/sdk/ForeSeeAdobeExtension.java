@@ -1,14 +1,13 @@
 package com.foresee.sdk;
 
 import android.app.Application;
-import android.content.Context;
 
 import com.adobe.marketing.mobile.ExtensionError;
 import com.adobe.marketing.mobile.ExtensionErrorCallback;
 import com.adobe.marketing.mobile.MobileCore;
 import com.foresee.sdk.adobeExtension.ExtensionImpl;
 import com.foresee.sdk.adobeExtension.logging.LogTags;
-import com.foresee.sdk.common.Logging;
+import com.foresee.sdk.adobeExtension.logging.Logging;
 
 import java.lang.reflect.Field;
 
