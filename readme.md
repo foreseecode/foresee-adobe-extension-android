@@ -1,9 +1,9 @@
 
-# ForeSee Adobe Extension Sample
+# ForeSee Adobe Extension
 
 ## Prerequisites
 
-To run this Sample, you need a [Adobe Experience Platform Launch](https://www.adobe.com/experience-platform/launch.html) account, and have set it up to use in mobile Apps.  
+To use the ForeSee Adobe Extension, you need a [Adobe Experience Platform Launch](https://www.adobe.com/experience-platform/launch.html) account, and have set it up to use in mobile Apps. Below we will use the built-in Sample app to demonstrate how to install the ForeSee Adobe Extension.
 
 ## Installing
 1.  In the Adobe Launch dashboard, create a new Property for Mobile platform.
