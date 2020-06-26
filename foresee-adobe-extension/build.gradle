@@ -1,5 +1,10 @@
 apply plugin: 'com.android.library'
 
+apply plugin: 'maven-publish'
+apply plugin: 'maven'
+
+group = 'com.foresee.sdk'
+
 android {
     compileSdkVersion 26
     defaultConfig {
@@ -17,6 +22,60 @@ android {
 
         release {
             debuggable false
+        }
+    }
+}
+
+publishing {
+    publications {
+        aar(MavenPublication) {
+            groupId 'com.foresee.sdk'
+            version '1.2.0'
+
+            // Set the artifactId
+            artifactId 'adobeExtension'
+
+            // Add the production release aar to the artifacts
+            artifact("$buildDir/outputs/aar/" + project.name + ".aar")
+
+            // Manually add dependencies to the pom.
+            setupPomDependencies(pom)
+        }
+    }
+
+    repositories {
+        maven {
+            mavenLocal()
+        }
+    }
+}
+
+
+def setupPomDependencies(pom) {
+    pom.withXml {
+        def dependenciesNode = asNode().appendNode('dependencies')
+        // Iterate over the compile dependencies.
+        // These include api, releaseApi and implementation. But not compile!! Hence don't
+        // use compile in projects.
+        configurations.api.allDependencies.each {
+            pomConfig(it, dependenciesNode)
+        }
+        configurations.releaseApi.allDependencies.each {
+            pomConfig(it, dependenciesNode)
+        }
+        configurations.implementation.allDependencies.each {
+            pomConfig(it, dependenciesNode)
+        }
+    }
+}
+
+static def pomConfig(it, dependenciesNode) {
+    if (it.group != null && it.name != null) {
+        def dependencyNode = dependenciesNode.appendNode('dependency')
+        if (it.name != 'unspecified') {
+            dependencyNode.appendNode('groupId', it.group)
+            dependencyNode.appendNode('artifactId', it.name)
+            dependencyNode.appendNode('version', it.version)
         }
     }
 }
