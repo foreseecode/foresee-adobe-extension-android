@@ -270,7 +270,7 @@ public class ExtensionImpl extends Extension {
     }
 
     private void handleVerintSpecificEvent(Event event, Map<String, Object> configSharedState) {
-        Logging.internalLog(Logging.LogLevel.INFO, LogTags.ADOBE_TAG, "Handling a ForeSee specific event");
+        Logging.internalLog(Logging.LogLevel.INFO, LogTags.ADOBE_TAG, "Handling a Verint specific event");
         // no-ops
     }
 

@@ -15,7 +15,7 @@ import com.verint.xm.sdk.AdobeExtension;
 
 public class SampleApplication extends Application {
 
-    static final String TAG = "ForeSeeSample";
+    static final String TAG = "VerintSample";
 
     @Override
     public void onCreate() {
