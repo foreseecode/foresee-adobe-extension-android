@@ -5,16 +5,18 @@ apply plugin: 'maven'
 
 group = 'com.foresee.sdk'
 
+version = "2.0.0"
+
 android {
-    compileSdkVersion 26
+    compileSdkVersion 29
     defaultConfig {
         minSdkVersion 19
-        targetSdkVersion 26
+        targetSdkVersion 29
     }
 
     buildTypes {
         all {
-            buildConfigField "String", "ForeSeeAdobeExtensionVersion", "\"1.2.0\""
+            buildConfigField "String", "AdobeExtensionVersion", "\"${version}\""
         }
         debug {
             debuggable true
@@ -30,13 +32,14 @@ publishing {
     publications {
         aar(MavenPublication) {
             groupId 'com.foresee.sdk'
-            version '1.2.0'
+            version "${version}"
 
             // Set the artifactId
             artifactId 'adobeExtension'
 
             // Add the production release aar to the artifacts
-            artifact("$buildDir/outputs/aar/" + project.name + ".aar")
+            artifact("$buildDir/outputs/aar/${project.name}-${version}.aar")
+
 
             // Manually add dependencies to the pom.
             setupPomDependencies(pom)
@@ -83,13 +86,17 @@ static def pomConfig(it, dependenciesNode) {
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
 
-    // ForeSee dependencies
-    implementation 'com.foresee.sdk:core:6.+'
-    implementation 'com.foresee.sdk:cxMeasure:6.+'
+    // Verint dependencies
+    implementation 'com.foresee.sdk:core:7.0.0'
+    implementation 'com.foresee.sdk:cxmeasure:7.0.0'
+
+
+//    implementation fileTree(dir: '../libs', include: ['*.aar'])
+//    implementation 'com.google.code.gson:gson:2.2.4'
 
     // Adobe dependencies
-    compileOnly 'com.adobe.marketing.mobile:userprofile:1.+'
-    compileOnly 'com.adobe.marketing.mobile:sdk-core:1.+'
+    compileOnly 'com.adobe.marketing.mobile:userprofile:1.1.0'
+    compileOnly 'com.adobe.marketing.mobile:sdk-core:1.11.0'
 
     compileOnly 'com.android.support:appcompat-v7:26.1.0'
 }

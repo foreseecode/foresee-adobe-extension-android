@@ -13,7 +13,7 @@
 		"sample_app":"Adobe Extension Sample CPP"
 	},
 	"invite": {
-		"logo": "foresee_logo",
+		"logo": "exp_logo",
 		"baseColor": [235, 43, 61]
 	}
 }

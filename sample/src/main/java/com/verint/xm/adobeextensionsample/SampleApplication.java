@@ -1,4 +1,4 @@
-package com.foresee.adobeextensionsample;
+package com.verint.xm.adobeextensionsample;
 
 import android.app.Application;
 import android.util.Log;
@@ -10,8 +10,8 @@ import com.adobe.marketing.mobile.LoggingMode;
 import com.adobe.marketing.mobile.MobileCore;
 import com.adobe.marketing.mobile.Signal;
 import com.adobe.marketing.mobile.UserProfile;
-import com.foresee.sdk.ForeSee;
-import com.foresee.sdk.ForeSeeAdobeExtension;
+
+import com.verint.xm.sdk.AdobeExtension;
 
 public class SampleApplication extends Application {
 
@@ -28,7 +28,7 @@ public class SampleApplication extends Application {
         MobileCore.setApplication(this);
         MobileCore.setLogLevel(LoggingMode.DEBUG);
         try {
-            ForeSeeAdobeExtension.registerExtension();
+            AdobeExtension.registerExtension();
 
             Identity.registerExtension();
             Lifecycle.registerExtension();
