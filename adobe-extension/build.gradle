@@ -5,7 +5,8 @@ apply plugin: 'maven'
 
 group = 'com.verint.xm.sdk'
 
-version = "2.0.0"
+def extensionVersion = "2.0.0"
+def sdkVersion = "7.0.0"
 
 android {
     compileSdkVersion 29
@@ -16,7 +17,7 @@ android {
 
     buildTypes {
         all {
-            buildConfigField "String", "AdobeExtensionVersion", "\"${version}\""
+            buildConfigField "String", "AdobeExtensionVersion", "\"${extensionVersion}\""
         }
         debug {
             debuggable true
@@ -32,13 +33,13 @@ publishing {
     publications {
         aar(MavenPublication) {
             groupId 'com.verint.xm.sdk'
-            version "${version}"
+            version "${extensionVersion}"
 
             // Set the artifactId
             artifactId 'adobeExtension'
 
             // Add the production release aar to the artifacts
-            artifact("$buildDir/outputs/aar/${project.name}-${version}.aar")
+            artifact("$buildDir/outputs/aar/${project.name}.aar")
 
 
             // Manually add dependencies to the pom.
@@ -87,8 +88,8 @@ dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
 
     // Verint dependencies
-    implementation 'com.verint.xm.sdk:core:7.0.0'
-    implementation 'com.verint.xm.sdk:cxmeasure:7.0.0'
+    implementation "com.verint.xm.sdk:core:${sdkVersion}"
+    implementation "com.verint.xm.sdk:cxmeasure:${sdkVersion}"
 
     // Adobe dependencies
     compileOnly 'com.adobe.marketing.mobile:userprofile:1.1.0'
