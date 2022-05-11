@@ -3,7 +3,7 @@ apply plugin: 'com.android.library'
 apply plugin: 'maven-publish'
 apply plugin: 'maven'
 
-group = 'com.foresee.sdk'
+group = 'com.verint.xm.sdk'
 
 version = "2.0.0"
 
@@ -31,7 +31,7 @@ android {
 publishing {
     publications {
         aar(MavenPublication) {
-            groupId 'com.foresee.sdk'
+            groupId 'com.verint.xm.sdk'
             version "${version}"
 
             // Set the artifactId
@@ -87,12 +87,8 @@ dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
 
     // Verint dependencies
-    implementation 'com.foresee.sdk:core:7.0.0'
-    implementation 'com.foresee.sdk:cxmeasure:7.0.0'
-
-
-//    implementation fileTree(dir: '../libs', include: ['*.aar'])
-//    implementation 'com.google.code.gson:gson:2.2.4'
+    implementation 'com.verint.xm.sdk:core:7.0.0'
+    implementation 'com.verint.xm.sdk:cxmeasure:7.0.0'
 
     // Adobe dependencies
     compileOnly 'com.adobe.marketing.mobile:userprofile:1.1.0'
