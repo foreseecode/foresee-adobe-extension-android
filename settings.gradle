@@ -1,1 +1,1 @@
-include ':foresee-adobe-extension', ':sample'
+include ':adobe-extension', ':sample'

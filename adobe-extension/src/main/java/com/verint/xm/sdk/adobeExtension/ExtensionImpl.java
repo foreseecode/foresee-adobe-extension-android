@@ -1,4 +1,13 @@
-package com.foresee.sdk.adobeExtension;
+package com.verint.xm.sdk.adobeExtension;
+
+import static com.verint.xm.sdk.adobeExtension.Constants.ADOBE_IDENTITY_MID_CPP_KEY;
+import static com.verint.xm.sdk.adobeExtension.Constants.EVENT_TYPE_ADOBE_HUB;
+import static com.verint.xm.sdk.adobeExtension.Constants.EVENT_TYPE_ADOBE_RULES_ENGINE;
+import static com.verint.xm.sdk.adobeExtension.Constants.EVENT_TYPE_VERINT_EXTENSION;
+import static com.verint.xm.sdk.adobeExtension.Constants.VERINT_EXTENSION_NAME;
+import static com.verint.xm.sdk.adobeExtension.Constants.RULES_DETAIL_KEY;
+import static com.verint.xm.sdk.adobeExtension.Constants.RULES_TRIGGERED_CONSEQUENCE_KEY;
+import static com.verint.xm.sdk.adobeExtension.Constants.SharedState.IDENTITY;
 
 import android.app.Application;
 import android.content.Context;
@@ -10,11 +19,11 @@ import com.adobe.marketing.mobile.Extension;
 import com.adobe.marketing.mobile.ExtensionApi;
 import com.adobe.marketing.mobile.ExtensionError;
 import com.adobe.marketing.mobile.ExtensionErrorCallback;
-import com.foresee.sdk.ForeSee;
-import com.foresee.sdk.ForeSeeCxMeasure;
-import com.foresee.sdk.adobeExtension.logging.LogTags;
-import com.foresee.sdk.adobeExtension.logging.Logging;
-import com.foresee.sdk.common.utils.Util;
+import com.verint.xm.sdk.Core;
+import com.verint.xm.sdk.CxMeasure;
+import com.verint.xm.sdk.adobeExtension.logging.LogTags;
+import com.verint.xm.sdk.adobeExtension.logging.Logging;
+import com.verint.xm.sdk.common.utils.Util;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;
@@ -24,26 +33,17 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import static com.foresee.sdk.adobeExtension.Constants.ADOBE_IDENTITY_MID_CPP_KEY;
-import static com.foresee.sdk.adobeExtension.Constants.EVENT_TYPE_ADOBE_HUB;
-import static com.foresee.sdk.adobeExtension.Constants.EVENT_TYPE_ADOBE_RULES_ENGINE;
-import static com.foresee.sdk.adobeExtension.Constants.EVENT_TYPE_FORESEE_EXTENSION;
-import static com.foresee.sdk.adobeExtension.Constants.FORESEE_EXTENSION_NAME;
-import static com.foresee.sdk.adobeExtension.Constants.RULES_DETAIL_KEY;
-import static com.foresee.sdk.adobeExtension.Constants.RULES_TRIGGERED_CONSEQUENCE_KEY;
-import static com.foresee.sdk.adobeExtension.Constants.SharedState.IDENTITY;
-
 /**
  * Created by alan.wang on 2/27/19.
  */
 
 public class ExtensionImpl extends Extension {
     // region - constants
-    private static final String FORESEE_IS_DEBUG_KEY = "foresee.isDebugLoggingEnabled";
-    private static final String FORESEE_SHOULD_SKIP_POOLING_KEY = "foresee.shouldSkipPoolingCheck";
-    private static final String FORESEE_SHOULD_CONNECT_TO_CXSUITE_KEY = "foresee.shouldConnectToCxSuite";
+    private static final String VERINT_IS_DEBUG_KEY = "verint.isDebugLoggingEnabled";
+    private static final String VERINT_SHOULD_SKIP_POOLING_KEY = "verint.shouldSkipPoolingCheck";
+    private static final String VERINT_SHOULD_CONNECT_TO_CXSUITE_KEY = "verint.shouldConnectToCxSuite";
     private static final String IDENTITY_MID_KEY = "mid";
-    private static final String ACTION_TO_PERFORM_KEY = "foresee.performAction";
+    private static final String ACTION_TO_PERFORM_KEY = "verint.performAction";
     private static final String ACTION_CHECK_ELIGIBILITY = "checkIfEligibleForSurvey";
     //endregion
 
@@ -85,10 +85,10 @@ public class ExtensionImpl extends Extension {
                 ExtensionListener.class,
                 errorCallback);
 
-        // register a listener for ForeSeeAdobeExtension request events
+        // register a listener for SeeAdobeExtension request events
         extensionApi.registerEventListener(
-                EVENT_TYPE_FORESEE_EXTENSION,
-                Constants.EVENT_SOURCE_FORESEE_REQUEST_CONTENT,
+                EVENT_TYPE_VERINT_EXTENSION,
+                Constants.EVENT_SOURCE_VERINT_REQUEST_CONTENT,
                 ExtensionListener.class,
                 errorCallback);
 
@@ -102,12 +102,12 @@ public class ExtensionImpl extends Extension {
     // region - overwrites
     @Override
     protected String getName() {
-        return FORESEE_EXTENSION_NAME;
+        return VERINT_EXTENSION_NAME;
     }
 
     @Override
     protected String getVersion() {
-        return BuildConfig.ForeSeeAdobeExtensionVersion;
+        return BuildConfig.AdobeExtensionVersion;
     }
     // endregion
 
@@ -129,7 +129,7 @@ public class ExtensionImpl extends Extension {
             appContext.setAccessible(true);
             context = (Context) appContext.get(null);
         } catch (Exception e) {
-            Logging.foreSeeLog(Logging.LogLevel.ERROR, LogTags.ADOBE_TAG,
+            Logging.internalLog(Logging.LogLevel.ERROR, LogTags.ADOBE_TAG,
                     "Failed to retrieve application context: " + e.getMessage());
         }
         return context;
@@ -139,7 +139,7 @@ public class ExtensionImpl extends Extension {
         Map<String, Object> identitySharedState = getApi().getSharedEventState(IDENTITY, event, null);
 
         if (identitySharedState == null) {
-            Logging.foreSeeLog(Logging.LogLevel.INFO, LogTags.ADOBE_TAG,
+            Logging.internalLog(Logging.LogLevel.INFO, LogTags.ADOBE_TAG,
                     "Identity shared state is pending, returning nil");
             return;
         }
@@ -182,7 +182,7 @@ public class ExtensionImpl extends Extension {
 
             // NOTE: configuration is mandatory processing the event, so if shared state is null (pending) stop processing events
             if (configSharedState == null) {
-                Logging.foreSeeLog(Logging.LogLevel.INFO, LogTags.ADOBE_TAG,
+                Logging.internalLog(Logging.LogLevel.INFO, LogTags.ADOBE_TAG,
                         "Could not process event, configuration shared state is pending");
                 return;
             }
@@ -193,7 +193,7 @@ public class ExtensionImpl extends Extension {
                 // Set a Adobe ID CPP
                 if (!Util.isBlank(mid)) {
                     didSetAdobeMid = true;
-                    ForeSee.addCPPValue(ADOBE_IDENTITY_MID_CPP_KEY, mid);
+                    Core.addCPPValue(ADOBE_IDENTITY_MID_CPP_KEY, mid);
                 }
             }
 
@@ -203,8 +203,8 @@ public class ExtensionImpl extends Extension {
                 handleAdobeHubEvent(eventToProcess, configSharedState);
             } else if (Util.compareStringsIngoreCases(eventType, EVENT_TYPE_ADOBE_RULES_ENGINE)) {
                 handleRulesConsequence(eventToProcess, configSharedState);
-            } else if (Util.compareStringsIngoreCases(eventType, EVENT_TYPE_FORESEE_EXTENSION)) {
-                handleForeSeeSpecificEvent(eventToProcess, configSharedState);
+            } else if (Util.compareStringsIngoreCases(eventType, EVENT_TYPE_VERINT_EXTENSION)) {
+                handleVerintSpecificEvent(eventToProcess, configSharedState);
             }
 
             // event processed, remove it from the queue
@@ -213,17 +213,17 @@ public class ExtensionImpl extends Extension {
     }
 
     private void handleAdobeHubEvent(Event event, Map<String, Object> configSharedState) {
-        Logging.foreSeeLog(Logging.LogLevel.INFO, LogTags.ADOBE_TAG, "Handling a Adobe hub event");
+        Logging.internalLog(Logging.LogLevel.INFO, LogTags.ADOBE_TAG, "Handling a Adobe hub event");
 
-        final Boolean isDebug = (Boolean) configSharedState.get(FORESEE_IS_DEBUG_KEY);
-        final Boolean shouldSkipPooling = (Boolean) configSharedState.get(FORESEE_SHOULD_SKIP_POOLING_KEY);
-        final Boolean shouldConnectToCxSuite = (Boolean) configSharedState.get(FORESEE_SHOULD_CONNECT_TO_CXSUITE_KEY);
+        final Boolean isDebug = (Boolean) configSharedState.get(VERINT_IS_DEBUG_KEY);
+        final Boolean shouldSkipPooling = (Boolean) configSharedState.get(VERINT_SHOULD_SKIP_POOLING_KEY);
+        final Boolean shouldConnectToCxSuite = (Boolean) configSharedState.get(VERINT_SHOULD_CONNECT_TO_CXSUITE_KEY);
 
         if (shouldConnectToCxSuite != null) {
 
             this.shouldConnectToCxSuite = shouldConnectToCxSuite;
 
-            // Try start ForeSee SDK
+            // Try start Verint SDK
             if (!didReceivedConfiguration && applicationContext != null) {
                 didReceivedConfiguration = true;
 
@@ -231,20 +231,20 @@ public class ExtensionImpl extends Extension {
                 handler.post(new Runnable() {
                     @Override
                     public void run() {
-                        ForeSee.setDebugLogEnabled((isDebug == null) ? false : isDebug);
-                        ForeSee.enable();
-                        ForeSee.setSkipPoolingCheck((shouldSkipPooling == null) ? false : shouldSkipPooling);
+                        Core.setDebugLogEnabled((isDebug == null) ? false : isDebug);
+                        Core.enable();
+                        Core.setSkipPoolingCheck((shouldSkipPooling == null) ? false : shouldSkipPooling);
                     }
                 });
             }
         } else {
             Logging.alwaysLog(Logging.LogLevel.ERROR, LogTags.ADOBE_TAG,
-                    "Cannot initialize ForeSee SDK because some configuration settings are missing");
+                    "Cannot initialize Verint SDK because some configuration settings are missing");
         }
     }
 
     private void handleRulesConsequence(Event event, Map<String, Object> configSharedState) {
-        Logging.foreSeeLog(Logging.LogLevel.INFO, LogTags.ADOBE_TAG, "Handling a rules consequence");
+        Logging.internalLog(Logging.LogLevel.INFO, LogTags.ADOBE_TAG, "Handling a rules consequence");
         Map<String, Object> eventData = event.getEventData();
 
         Map<String, Object> triggeredConsequence = (HashMap<String, Object>) eventData.get(RULES_TRIGGERED_CONSEQUENCE_KEY);
@@ -265,12 +265,12 @@ public class ExtensionImpl extends Extension {
         }
 
         if (Util.compareStringsIngoreCases(actionToPerform, ACTION_CHECK_ELIGIBILITY)) {
-            ForeSeeCxMeasure.checkIfEligibleForSurvey();
+            CxMeasure.checkIfEligibleForSurvey();
         }
     }
 
-    private void handleForeSeeSpecificEvent(Event event, Map<String, Object> configSharedState) {
-        Logging.foreSeeLog(Logging.LogLevel.INFO, LogTags.ADOBE_TAG, "Handling a ForeSee specific event");
+    private void handleVerintSpecificEvent(Event event, Map<String, Object> configSharedState) {
+        Logging.internalLog(Logging.LogLevel.INFO, LogTags.ADOBE_TAG, "Handling a Verint specific event");
         // no-ops
     }
 

@@ -3,18 +3,21 @@ apply plugin: 'com.android.library'
 apply plugin: 'maven-publish'
 apply plugin: 'maven'
 
-group = 'com.foresee.sdk'
+group = 'com.verint.xm.sdk'
+
+def extensionVersion = "2.0.0"
+def sdkVersion = "7.0.0"
 
 android {
-    compileSdkVersion 26
+    compileSdkVersion 29
     defaultConfig {
         minSdkVersion 19
-        targetSdkVersion 26
+        targetSdkVersion 29
     }
 
     buildTypes {
         all {
-            buildConfigField "String", "ForeSeeAdobeExtensionVersion", "\"1.2.0\""
+            buildConfigField "String", "AdobeExtensionVersion", "\"${extensionVersion}\""
         }
         debug {
             debuggable true
@@ -29,14 +32,15 @@ android {
 publishing {
     publications {
         aar(MavenPublication) {
-            groupId 'com.foresee.sdk'
-            version '1.2.0'
+            groupId 'com.verint.xm.sdk'
+            version "${extensionVersion}"
 
             // Set the artifactId
             artifactId 'adobeExtension'
 
             // Add the production release aar to the artifacts
-            artifact("$buildDir/outputs/aar/" + project.name + ".aar")
+            artifact("$buildDir/outputs/aar/${project.name}.aar")
+
 
             // Manually add dependencies to the pom.
             setupPomDependencies(pom)
@@ -83,13 +87,13 @@ static def pomConfig(it, dependenciesNode) {
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
 
-    // ForeSee dependencies
-    implementation 'com.foresee.sdk:core:6.+'
-    implementation 'com.foresee.sdk:cxMeasure:6.+'
+    // Verint dependencies
+    implementation "com.verint.xm.sdk:core:${sdkVersion}"
+    implementation "com.verint.xm.sdk:cxmeasure:${sdkVersion}"
 
     // Adobe dependencies
-    compileOnly 'com.adobe.marketing.mobile:userprofile:1.+'
-    compileOnly 'com.adobe.marketing.mobile:sdk-core:1.+'
+    compileOnly 'com.adobe.marketing.mobile:userprofile:1.1.0'
+    compileOnly 'com.adobe.marketing.mobile:sdk-core:1.11.0'
 
     compileOnly 'com.android.support:appcompat-v7:26.1.0'
 }

@@ -1,9 +1,9 @@
-package com.foresee.sdk.adobeExtension.logging;
+package com.verint.xm.sdk.adobeExtension.logging;
 
 import android.util.Log;
 
-import com.foresee.sdk.common.environment.Environment;
-import com.foresee.sdk.common.utils.Util;
+import com.verint.xm.sdk.common.utils.Util;
+
 
 public class Logging {
 
@@ -25,7 +25,7 @@ public class Logging {
     Logging should follow the following rules:
     1. Initial setup of the SDK and any errors that prevent a major function of the SDK should
     always be output using alwaysLog
-    2. Anything that should only be seen by ForeSee should use the foreSeeLog function
+    2. Anything that should only be seen by internal should use the internalLog function
     3. The logging levels should be used as follows:
         DEBUG:  For showing events used specifically to debug certain scenarios
         INFO:   General day-to-day running of the app - stuff that happens a lot
@@ -57,18 +57,18 @@ public class Logging {
     }
 
     /**
-     * Log debug information for ForeSee only. These log messages will not be seen in release builds
+     * Log debug information for internal only. These log messages will not be seen in release builds
      *
      * @param level   the logging level
      * @param handle  the handle applied to the log message
      * @param message the message to log
      */
-    public static void foreSeeLog(LogLevel level, String handle, String message) {
-        foreSeeLog(level, handle, message, null);
+    public static void internalLog(LogLevel level, String handle, String message) {
+        internalLog(level, handle, message, null);
     }
 
     /**
-     * Log debug information with throwable for ForeSee only. These log messages will not be seen
+     * Log debug information with throwable for internal only. These log messages will not be seen
      * in release builds
      *
      * @param level   the logging level
@@ -76,7 +76,7 @@ public class Logging {
      * @param message the message to log
      * @param t       the Throwable to include with the log
      */
-    public static void foreSeeLog(LogLevel level, String handle, String message, Throwable t) {
+    public static void internalLog(LogLevel level, String handle, String message, Throwable t) {
 
         if (t != null) {
             alwaysLog(level, handle, message, t);

@@ -1,16 +1,16 @@
-package com.foresee.sdk.adobeExtension;
+package com.verint.xm.sdk.adobeExtension;
+
+import static com.verint.xm.sdk.adobeExtension.Constants.EVENT_TYPE_ADOBE_HUB;
+import static com.verint.xm.sdk.adobeExtension.Constants.EVENT_TYPE_ADOBE_RULES_ENGINE;
+import static com.verint.xm.sdk.adobeExtension.Constants.EVENT_TYPE_VERINT_EXTENSION;
+import static com.verint.xm.sdk.adobeExtension.Constants.SharedState.CONFIGURATION;
+import static com.verint.xm.sdk.adobeExtension.Constants.SharedState.STATE_OWNER;
 
 import com.adobe.marketing.mobile.Event;
 import com.adobe.marketing.mobile.ExtensionApi;
-import com.foresee.sdk.common.utils.Util;
+import com.verint.xm.sdk.common.utils.Util;
 
 import java.util.Map;
-
-import static com.foresee.sdk.adobeExtension.Constants.EVENT_TYPE_ADOBE_HUB;
-import static com.foresee.sdk.adobeExtension.Constants.EVENT_TYPE_ADOBE_RULES_ENGINE;
-import static com.foresee.sdk.adobeExtension.Constants.EVENT_TYPE_FORESEE_EXTENSION;
-import static com.foresee.sdk.adobeExtension.Constants.SharedState.CONFIGURATION;
-import static com.foresee.sdk.adobeExtension.Constants.SharedState.STATE_OWNER;
 
 /**
  * Created by alan.wang on 2/27/19.
@@ -43,7 +43,7 @@ public class ExtensionListener extends com.adobe.marketing.mobile.ExtensionListe
             }
         } else if (Util.compareStringsIngoreCases(eventType, EVENT_TYPE_ADOBE_RULES_ENGINE)) {
             parentExtension.queueAndProcessEvents(event);
-        } else if (Util.compareStringsIngoreCases(eventType, EVENT_TYPE_FORESEE_EXTENSION)) {
+        } else if (Util.compareStringsIngoreCases(eventType, EVENT_TYPE_VERINT_EXTENSION)) {
             parentExtension.queueAndProcessEvents(event);
         }
     }

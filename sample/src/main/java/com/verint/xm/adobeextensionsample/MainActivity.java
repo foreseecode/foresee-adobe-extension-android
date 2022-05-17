@@ -1,16 +1,18 @@
-package com.foresee.adobeextensionsample;
-
+package com.verint.xm.adobeextensionsample;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+
 import android.view.View;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.adobe.marketing.mobile.MobileCore;
-import com.foresee.sdk.ForeSee;
+import com.verint.xm.sdk.Core;
 
 import java.util.HashMap;
 import java.util.Map;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -29,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void resetCounters(View view) {
         // Reset the SDK state
-        ForeSee.resetState();
+        Core.resetState();
     }
 
     private static void adobeTrackActivity(Activity activity) {
