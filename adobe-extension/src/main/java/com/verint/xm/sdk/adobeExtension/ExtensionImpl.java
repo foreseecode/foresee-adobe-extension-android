@@ -20,7 +20,7 @@ import com.adobe.marketing.mobile.ExtensionApi;
 import com.adobe.marketing.mobile.ExtensionError;
 import com.adobe.marketing.mobile.ExtensionErrorCallback;
 import com.verint.xm.sdk.Core;
-import com.verint.xm.sdk.CxMeasure;
+import com.verint.xm.sdk.Predictive;
 import com.verint.xm.sdk.adobeExtension.logging.LogTags;
 import com.verint.xm.sdk.adobeExtension.logging.Logging;
 import com.verint.xm.sdk.common.utils.Util;
@@ -265,7 +265,7 @@ public class ExtensionImpl extends Extension {
         }
 
         if (Util.compareStringsIngoreCases(actionToPerform, ACTION_CHECK_ELIGIBILITY)) {
-            CxMeasure.checkIfEligibleForSurvey();
+            Predictive.checkIfEligibleForSurvey();
         }
     }
 
