@@ -89,7 +89,7 @@ dependencies {
 
     // Verint dependencies
     implementation "com.verint.xm.sdk:core:${sdkVersion}"
-    implementation "com.verint.xm.sdk:cxmeasure:${sdkVersion}"
+    implementation "com.verint.xm.sdk:predictive:${sdkVersion}"
 
     // Adobe dependencies
     compileOnly 'com.adobe.marketing.mobile:userprofile:1.1.0'
