@@ -1,12 +1,12 @@
 {
-	"clientId":"FSRTESTINGCODECID12345==",
+	"customerId":"FSRTESTINGCODECID12345==",
 	"notificationType": "IN_SESSION",
 	"measures":
 	[
 		{
 			"surveyId": "iphone_app_QA",
 			"surveyStyle": "modern",
-			"launchCount": 3
+			"launchCount": 0
 		}
 	],
 	"cppParameters": {
@@ -14,6 +14,12 @@
 	},
 	"invite": {
 		"logo": "exp_logo",
-		"baseColor": [235, 43, 61]
+		"header": "exp_logo",
+		"baseColor": [255, 159, 234]
+	},
+	"survey": {
+		"closeButtonColor": [132, 112, 255],
+		"closeButtonBackgroundColor": [255,255,102],
+		"headerColor": [255, 204, 203]
 	}
 }

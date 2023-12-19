@@ -37,7 +37,7 @@ public class SampleApplication extends Application {
             MobileCore.start(new AdobeCallback() {
                 @Override
                 public void call(Object o) {
-                    MobileCore.configureWithAppID("launch-your-appID");
+                    MobileCore.configureWithAppID("launch-ENd52c4e388a484e68955cb76df95d66b6-development");
                 }
             });
         } catch (Exception ex) {
