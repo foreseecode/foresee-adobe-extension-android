@@ -1,7 +1,5 @@
 apply plugin: 'com.android.library'
-
 apply plugin: 'maven-publish'
-apply plugin: 'maven'
 
 group = 'com.verint.xm.sdk'
 
@@ -9,7 +7,7 @@ def extensionVersion = "2.0.0"
 def sdkVersion = "7.1.1"
 
 android {
-    compileSdkVersion 29
+    compileSdkVersion 33
     defaultConfig {
         minSdkVersion 19
         targetSdkVersion 29
@@ -95,5 +93,5 @@ dependencies {
     compileOnly 'com.adobe.marketing.mobile:userprofile:1.1.0'
     compileOnly 'com.adobe.marketing.mobile:sdk-core:1.11.0'
 
-    compileOnly 'com.android.support:appcompat-v7:26.1.0'
+    compileOnly 'androidx.appcompat:appcompat:1.0.0'
 }
